@@ -5,6 +5,7 @@ import numpy as np
 import os
 import time
 import sys
+import mediapipe.python.solutions.hands as mp_hands
 
 
 def resource_path(relative_path):
@@ -45,7 +46,7 @@ def run():
         "RPS": {
             "file": "rps_model.pkl",
             "scaler": "scaler.pkl",
-            "gestures": {0: "Rock", 1: "Paper", 2: "Scissors"}
+            "gestures": {0: "Rock", 1: "Paper", 2: "Scissors", 3: "switch"}
         },
         "Alphabet": {
             "file": "alphabet_model.pkl",
@@ -54,25 +55,38 @@ def run():
                 0: "A", 1: "B", 2: "C", 3: "D", 4: "E", 5: "F", 6: "G", 7: "H",
                 8: "I", 9: "J", 10: "K", 11: "L", 12: "M", 13: "N", 14: "O",
                 15: "P", 16: "Q", 17: "R", 18: "S", 19: "T", 20: "U", 21: "V",
-                22: "W", 23: "Y", 24: "Z"
+                22: "W", 23: "Y", 24: "Z", 25: ".", 26: ",", 27: "?", 28: " ", 29: "switch"
             }
+        },
+        "Numbers": {
+            "file": "num_model.pkl",
+            "scaler": "num_scaler.pkl",
+            "gestures": {0: "0", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "switch"}
         }
     }
 
     mode = "Alphabet"
+    all_modes = list(models.keys())
 
     def load(name):
         setting = models[name]
-        if os.path.exists(setting["file"]) and os.path.exists(setting["scaler"]):
-            m = joblib.load(setting["file"])
-            s = joblib.load(setting["scaler"])
+        model_path = resource_path(setting["file"])
+        scaler_path = resource_path(setting["scaler"])
+
+        if os.path.exists(model_path) and os.path.exists(scaler_path):
+            m = joblib.load(model_path)
+            s = joblib.load(scaler_path)
             return m, s, setting["gestures"]
         return None, None, None
 
     model, scaler, letter = load(mode)
 
-    mp_hands = mp.solutions.hands
-    hands = mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.7)
+    hands = mp_hands.Hands(
+        static_image_mode=False,
+        max_num_hands=1,
+        min_detection_confidence=0.7,
+        min_tracking_confidence=0.5
+    )
     mp_draw = mp.solutions.drawing_utils
 
     cap = cv2.VideoCapture(0)
@@ -96,7 +110,11 @@ def run():
         cv2.destroyWindow("Camera Error")
         cap.release()
         return
+
     sentence = ""
+    last_detected = None
+    start_time = None
+    req_time = 3
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -113,7 +131,6 @@ def run():
         if res.multi_hand_landmarks:
             for hand in res.multi_hand_landmarks:
                 mp_draw.draw_landmarks(frame, hand, mp_hands.HAND_CONNECTIONS)
-
                 data = []
                 zero_x = hand.landmark[0].x
                 zero_y = hand.landmark[0].y
@@ -130,7 +147,34 @@ def run():
                     num = model.predict(entry_scaled)[0]
                     message = letter.get(num, "?")
 
+        if message not in ["Looking for hand...", "switch"]:
+            if message == last_detected:
+                elaps = time.time() - start_time
+                cv2.rectangle(frame, (0, 60), (int((elaps / req_time) * w), 70), (0, 255, 255), -1)
+                if elaps >= req_time:
+                    sentence += message
+                    last_detected = None
+                    start_time = time.time()
+            else:
+                last_detected = message
+                start_time = time.time()
+        elif message == "switch":
+            if last_detected == "switch":
+                if time.time() - start_time >= 2.0:
+                    mode = all_modes[(all_modes.index(mode) + 1) % len(all_modes)]
+                    model, scaler, letter = load(mode)
+                    last_detected = None
+                    time.sleep(0.5)
+            else:
+                last_detected = "switch"
+                start_time = time.time()
+        else:
+            last_detected = None
+
         cv2.rectangle(frame, (0, 0), (w, 60), (30, 30, 30), -1)
+        cv2.putText(frame, mode, (w - 170, 35), 0, 0.8, (255, 255, 255), 2)
+        cv2.rectangle(frame, (0, 0), (w - 180, 60), (30, 30, 30), -1)
+
         cv2.putText(frame, "Detecting: " + message, (20, 40), 0, 0.8, (0, 255, 0), 2)
 
         cv2.rectangle(frame, (0, h - 80), (w, h), (50, 50, 50), -1)
@@ -147,8 +191,9 @@ def run():
         if key == 27:
             break
         elif key == ord('m'):
-            mode = "Alphabet" if mode == "RPS" else "RPS"
+            mode = all_modes[(all_modes.index(mode) + 1) % len(all_modes)]
             model, scaler, letter = load(mode)
+            last_detected = None
         elif key == 13:
             if message != "Looking for hand..." and message != "?":
                 sentence = sentence + message[0]
@@ -167,3 +212,9 @@ if __name__ == "__main__":
             run()
         else:
             break
+
+
+# pyinstaller --noconfirm --onefile --windowed --name "GestureDetector" --additional-hooks-dir=hooks --collect-all
+# mediapipe --collect-all sklearn --hidden-import sklearn.ensemble._forest --hidden-import sklearn.tree._utils
+# --add-data "alphabet_model.pkl;." --add-data "num_model.pkl;." --add-data "num_scaler.pkl;." --add-data "alphabet_scaler.pkl;." --add-data "rps_model.pkl;." --add-data
+# "scaler.pkl;." main.py
