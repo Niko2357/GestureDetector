@@ -22,8 +22,6 @@ def log_gesture_data():
             writer = csv.writer(f)
             writer.writerow(header)
 
-    print("Stiskni: 'r' (Rock), 'p' (Paper), 's' (Scissors), 'q' (Quit)")
-
     while cap.isOpened():
         success, image = cap.read()
         if not success:
@@ -85,6 +83,16 @@ def log_gesture_data():
             label = 23
         elif key == ord('z'):
             label = 24
+        elif key == ord('.'):
+            label = 25
+        elif key == ord(','):
+            label = 26
+        elif key == ord('*'):  # ?
+            label = 27
+        elif key == ord('-'):  # space
+            label = 28
+        elif key == ord('+'):  # mode
+            label = 29
         elif key == ord('Q'):
             break
 
