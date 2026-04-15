@@ -42,6 +42,6 @@ Then you simply run the application. Available gesture are displayed in an image
   * modes switch by gesture         
               
 ## Author
-Name: Nikola Poláchová
-Subject: Programming 
-Year: 2026
+**Name:** Nikola Poláchová 
+**Subject:** Programming 
+**Year:** 2026
