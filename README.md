@@ -2,7 +2,7 @@
 Using mediapipe library this project detects 21 point in one's hand and matches them with letters according to this diagram. Enables user to write a whole sentences with only his hands. 
 
 ## Data Collection 
-Data were collected by using DataCollection project. It uses mediapipe library that locates 21 points on hand and counts their cordinates. So data were collected by recording these points and loading them into csv file. These files includes cordinates of alphabetical, numerical, few special characters and rock, paper, scissors game gestures. 
+Data were collected by using DataCollection project. It uses mediapipe library that locates 21 points on hand and counts their cordinates ([x, y, z] landmarks). So data were collected by recording these points and loading them into csv file. These files includes cordinates of alphabetical, numerical, few special characters and rock, paper, scissors game gestures. 
 
 ### Data processing
 Data were cleaned and transformed in Jupyter colab notebook. They were reduced of duplicate records and null lines. 
