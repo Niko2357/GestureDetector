@@ -14,7 +14,7 @@ https://colab.research.google.com/drive/1Es2mXxtfxMs5MvX3xGpQhv7P-3ra6VXZ#scroll
 
 ## Execution and usage
 Basicly install .exe file in Releases section. The newer version the better.
-Then you simply run the application. Available gesture are displayed in an image bellow.
+Then you simply run the application. Available gestures are displayed in an images bellow.
 
 <img width="559" height="900" alt="prstováAbeceda" src="https://github.com/user-attachments/assets/46b98458-ed40-4352-9a8c-f45430de000d" />
 
