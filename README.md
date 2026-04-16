@@ -35,6 +35,7 @@ Then you simply run the application. Available gestures are displayed in an imag
 * NumPy - 2.2.6
 * Pandas - 2.3.3
 * Scikit-learn - 1.8.0
+* Others: os, sys, time
 
 ## Version and Issues
 * Version: 1.0 
