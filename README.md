@@ -6,11 +6,11 @@ Data were collected by using DataCollection project. It uses Mediapipe library t
 
 ### Data processing
 Data were cleaned and transformed in Jupyter colab notebook using Pandas. They were reduced of duplicate records and null lines. 
-https://colab.research.google.com/drive/1Es2mXxtfxMs5MvX3xGpQhv7P-3ra6VXZ#scrollTo=1_l9p4xuMnyD 
+[Clearing Data - Jupyter Notebook](https://colab.research.google.com/drive/1Es2mXxtfxMs5MvX3xGpQhv7P-3ra6VXZ#scrollTo=1_l9p4xuMnyD)
 
 ### Data Usage - Model 
 Three Random forest models were trained and used. Each for different gesture modes. All models reached accuracy of 99%.
-https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+[Random Forest Classifier Documentation](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html)
 
 ## Requirements 
 * **Python 3.11.x or 3.10.x**
