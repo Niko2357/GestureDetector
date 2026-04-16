@@ -1,5 +1,5 @@
 # Gesture Detector
-Using mediapipe library this project detects 21 point in one's hand and matches them with letters according to this diagram. Enables user to write a whole sentences with only his hands. 
+Using mediapipe library this project detects 21 point in one's hand and matches them with letters according to [this](##Execution-and-Usage) diagram. Enables user to write a whole sentences with only his hands. 
 
 ## Data Collection 
 Data were collected by using DataCollection project. It uses Mediapipe library that locates 21 points on hand and counts their cordinates ([x, y, z] landmarks) from zero point on a wrist. They were collected by recording these points and loading them into csv file. These files includes cordinates of alphabetical, numerical, few special characters and rock, paper, scissors game gestures. 
