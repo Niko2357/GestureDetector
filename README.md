@@ -10,6 +10,7 @@ https://colab.research.google.com/drive/1Es2mXxtfxMs5MvX3xGpQhv7P-3ra6VXZ#scroll
 
 ### Data Usage - Model 
 Three Random forest models were trained and used. Each for different gesture modes. All models reached accuracy of 99%.
+https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
 
 ## Requirements 
 * **Python 3.11.x or 3.10.x**
