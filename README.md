@@ -29,12 +29,12 @@ Then you simply run the application. Available gestures are displayed in an imag
 <img width="523" height="315" alt="cisla" src="https://github.com/user-attachments/assets/517c4e0e-914d-4551-960b-5642cdd2268d" />
 
 ## Used Libraries
-* MediaPipe
-* Opencv
-* Joblib
-* NumPy
-* Pandas
-* Scikit-learn
+* MediaPipe - 0.10.5
+* Opencv (cv2) - 4.12.0
+* Joblib - 1.5.3
+* NumPy - 2.2.6
+* Pandas - 2.3.3
+* Scikit-learn - 1.8.0
 
 ## Version and Issues
 * Version: 1.0 
